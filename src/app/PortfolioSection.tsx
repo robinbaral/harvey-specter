@@ -1,4 +1,4 @@
-import { client } from '@/sanity/lib/client'
+import { sanityFetch } from '@/sanity/lib/live'
 import { urlFor } from '@/sanity/lib/image'
 import type { SanityImageSource } from '@sanity/image-url'
 
@@ -10,18 +10,17 @@ type PortfolioItem = {
   order: number
 }
 
+const PORTFOLIO_QUERY = `*[_type == "portfolio"] | order(order asc)[0...4] {
+  _id,
+  title,
+  image,
+  tags,
+  order
+}`
+
 async function getPortfolioItems(): Promise<PortfolioItem[]> {
-  return client.fetch(
-    `*[_type == "portfolio"] | order(order asc)[0...4] {
-      _id,
-      title,
-      image,
-      tags,
-      order
-    }`,
-    {},
-    { next: { revalidate: 60 } }
-  )
+  const { data } = await sanityFetch({ query: PORTFOLIO_QUERY })
+  return data
 }
 
 const ctaText =
