@@ -1,25 +1,27 @@
-const projects = [
-  {
-    title: 'Surfers Paradise',
-    tags: ['Social Media', 'Photography'],
-    img: 'https://www.figma.com/api/mcp/asset/e373f8fb-f3ff-4de2-a3b5-a9dfee66c7a9',
-  },
-  {
-    title: 'Cyberpunk Caffe',
-    tags: ['Social Media', 'Photography'],
-    img: 'https://www.figma.com/api/mcp/asset/17401e18-08c2-458f-be91-91c0169570d4',
-  },
-  {
-    title: 'Agency 976',
-    tags: ['Social Media', 'Photography'],
-    img: 'https://www.figma.com/api/mcp/asset/55e5c3af-8aa6-4434-825b-12fe9bc65cc6',
-  },
-  {
-    title: 'Minimal Playground',
-    tags: ['Social Media', 'Photography'],
-    img: 'https://www.figma.com/api/mcp/asset/9c45316d-d95b-457e-a737-e9fc134083d5',
-  },
-];
+import { sanityFetch } from '@/sanity/lib/live'
+import { urlFor } from '@/sanity/lib/image'
+import type { SanityImageSource } from '@sanity/image-url'
+
+type PortfolioItem = {
+  _id: string
+  title: string
+  image?: SanityImageSource
+  tags: string[]
+  order: number
+}
+
+const PORTFOLIO_QUERY = `*[_type == "portfolio"] | order(order asc)[0...4] {
+  _id,
+  title,
+  image,
+  tags,
+  order
+}`
+
+async function getPortfolioItems(): Promise<PortfolioItem[]> {
+  const { data } = await sanityFetch({ query: PORTFOLIO_QUERY })
+  return data
+}
 
 const ctaText =
   'Discover how my creativity transforms ideas into impactful digital experiences — schedule a call with me to get started.';
@@ -31,7 +33,6 @@ const Arrow = () => (
   </svg>
 );
 
-// Shared corner bracket SVGs
 const CornerTL = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
     <path d="M15 1H1V15" stroke="#1f1f1f" strokeWidth="1.25" strokeLinecap="square" />
@@ -61,21 +62,23 @@ function Tag({ label }: { label: string }) {
   );
 }
 
-function Card({ title, tags, img, imgH }: { title: string; tags: string[]; img: string; imgH: string }) {
+function Card({ title, tags, image, imgH }: { title: string; tags: string[]; image?: SanityImageSource; imgH: string }) {
+  const imgSrc = image ? urlFor(image).width(800).auto('format').url() : null
+
   return (
     <div className="flex flex-col gap-[10px] w-full">
-      {/* Image with tags overlay */}
-      <div className={`relative overflow-hidden flex flex-col justify-end pb-4 pl-4 ${imgH}`}>
-        <img
-          src={img}
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-        />
+      <div className={`relative overflow-hidden flex flex-col justify-end pb-4 pl-4 ${imgH} bg-[#e8e8e8]`}>
+        {imgSrc && (
+          <img
+            src={imgSrc}
+            alt={title}
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          />
+        )}
         <div className="relative flex gap-3 flex-wrap">
-          {tags.map((t) => <Tag key={t} label={t} />)}
+          {tags?.map((t) => <Tag key={t} label={t} />)}
         </div>
       </div>
-      {/* Title + arrow */}
       <div className="flex items-center justify-between">
         <p className="font-black text-black uppercase tracking-[-0.04em] leading-[1.1] text-[24px] md:text-[36px] whitespace-nowrap">
           {title}
@@ -109,8 +112,11 @@ function CTABlock() {
   );
 }
 
-export default function PortfolioSection() {
-  const [p1, p2, p3, p4] = projects;
+export default async function PortfolioSection() {
+  const projects = await getPortfolioItems()
+  const [p1, p2, p3, p4] = projects
+
+  if (!p1) return null
 
   return (
     <section className="bg-[#fafafa] px-4 py-12 md:px-8 md:py-[80px]">
@@ -138,7 +144,6 @@ export default function PortfolioSection() {
           </div>
           <p className="font-mono text-[14px] text-[#1f1f1f] leading-[1.1] mt-1">004</p>
         </div>
-        {/* [ portfolio ] rotated -90° */}
         <div className="flex items-center justify-center w-[15px] h-[110px] shrink-0">
           <p className="font-mono text-[14px] text-[#1f1f1f] uppercase whitespace-nowrap -rotate-90">
             [ portfolio ]
@@ -148,25 +153,23 @@ export default function PortfolioSection() {
 
       {/* ── Mobile grid — single column ─────────────────────── */}
       <div className="flex flex-col gap-6 md:hidden">
-        <Card title={p1.title} tags={p1.tags} img={p1.img} imgH="h-[390px]" />
-        <Card title={p2.title} tags={p2.tags} img={p2.img} imgH="h-[390px]" />
-        <Card title={p3.title} tags={p3.tags} img={p3.img} imgH="h-[390px]" />
-        <Card title={p4.title} tags={p4.tags} img={p4.img} imgH="h-[390px]" />
+        {p1 && <Card title={p1.title} tags={p1.tags} image={p1.image} imgH="h-[390px]" />}
+        {p2 && <Card title={p2.title} tags={p2.tags} image={p2.image} imgH="h-[390px]" />}
+        {p3 && <Card title={p3.title} tags={p3.tags} image={p3.image} imgH="h-[390px]" />}
+        {p4 && <Card title={p4.title} tags={p4.tags} image={p4.image} imgH="h-[390px]" />}
         <CTABlock />
       </div>
 
       {/* ── Desktop grid — two staggered columns ────────────── */}
       <div className="hidden md:flex gap-6 items-end">
-        {/* Left column */}
         <div className="flex flex-col gap-6 flex-1">
-          <Card title={p1.title} tags={p1.tags} img={p1.img} imgH="h-[744px]" />
-          <Card title={p2.title} tags={p2.tags} img={p2.img} imgH="h-[699px]" />
+          {p1 && <Card title={p1.title} tags={p1.tags} image={p1.image} imgH="h-[744px]" />}
+          {p2 && <Card title={p2.title} tags={p2.tags} image={p2.image} imgH="h-[699px]" />}
           <CTABlock />
         </div>
-        {/* Right column — pushed down 240px to create stagger */}
         <div className="flex flex-col gap-6 flex-1 pt-[240px]">
-          <Card title={p3.title} tags={p3.tags} img={p3.img} imgH="h-[699px]" />
-          <Card title={p4.title} tags={p4.tags} img={p4.img} imgH="h-[744px]" />
+          {p3 && <Card title={p3.title} tags={p3.tags} image={p3.image} imgH="h-[699px]" />}
+          {p4 && <Card title={p4.title} tags={p4.tags} image={p4.image} imgH="h-[744px]" />}
         </div>
       </div>
 
