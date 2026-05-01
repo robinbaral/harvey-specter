@@ -33,12 +33,10 @@ export default function ServicesSection() {
   return (
     <section className="bg-black px-4 py-12 flex flex-col gap-8 md:px-8 md:py-[80px] md:gap-12">
 
-      {/* [ services ] label */}
       <p className="font-mono text-[14px] text-white uppercase leading-[1.1]">
         [ services ]
       </p>
 
-      {/* [4]  Deliverables heading */}
       <div className="flex items-center justify-between w-full">
         <span className="font-light text-white uppercase tracking-[-0.08em] leading-none text-[8.5vw] md:text-[6.67vw]">
           [4]
@@ -48,32 +46,28 @@ export default function ServicesSection() {
         </span>
       </div>
 
-      {/* Service items */}
       <div className="flex flex-col gap-12 w-full">
         {services.map((s) => (
-          <div key={s.num} className="flex flex-col gap-[9px] w-full">
+          <div key={s.num} className="flex flex-col gap-[9px] w-full group cursor-pointer">
 
-            {/* Number + divider */}
-            <p className="font-mono text-[14px] text-white uppercase leading-[1.1]">
+            <p className="font-mono text-[14px] text-white/50 uppercase leading-[1.1] transition-colors duration-300 group-hover:text-white/80">
               {s.num}
             </p>
-            <div className="h-px w-full bg-white/25" />
+            <div className="h-px w-full bg-white/25 transition-colors duration-300 group-hover:bg-white/60" />
 
-            {/* Content: title left, description+image right on desktop; stacked on mobile */}
             <div className="flex flex-col gap-4 pt-[9px] lg:flex-row lg:items-start lg:justify-between">
-              <p className="text-[36px] font-bold italic text-white uppercase tracking-[-0.04em] leading-[1.1] whitespace-nowrap">
+              <p className="text-[36px] font-bold italic text-white uppercase tracking-[-0.04em] leading-[1.1] whitespace-nowrap transition-transform duration-300 group-hover:translate-x-2">
                 {s.title}
               </p>
               <div className="flex flex-col gap-4 lg:flex-row lg:gap-6 lg:items-start">
-                <p className="text-[14px] text-white leading-[1.3] tracking-[-0.04em] lg:w-[393px]">
+                <p className="text-[14px] text-white/70 leading-[1.3] tracking-[-0.04em] lg:w-[393px] transition-colors duration-300 group-hover:text-white">
                   {s.desc}
                 </p>
-                {/* 151×151 thumbnail — 1:1 aspect ratio maintained */}
                 <div className="relative w-[151px] h-[151px] shrink-0 overflow-hidden">
                   <img
                     src={s.img}
                     alt={s.title}
-                    className={`absolute inset-0 w-full h-full object-cover ${s.imgPosition}`}
+                    className={`absolute inset-0 w-full h-full object-cover ${s.imgPosition} transition-transform duration-500 group-hover:scale-110`}
                   />
                 </div>
               </div>

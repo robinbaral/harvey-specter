@@ -25,6 +25,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Custom cursor — only active when the class is present (not on /studio) */
+html.custom-cursor-active,
+html.custom-cursor-active a,
+html.custom-cursor-active button {
+  cursor: none;
+}
+
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
