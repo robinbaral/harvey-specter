@@ -3,7 +3,7 @@ export const PORTFOLIO_QUERY = `
     _id,
     title,
     slug,
-    "imageUrl": image.asset->url,
+    "imageUrl": coalesce(image.asset->url, externalImageUrl),
     category,
     tags,
     year,
@@ -20,7 +20,8 @@ export const SERVICES_QUERY = `
     slug,
     description,
     deliverables,
-    "imageUrl": image.asset->url,
+    "imageUrl": coalesce(image.asset->url, externalImageUrl),
+    imagePosition,
     duration,
     order
   }
@@ -34,7 +35,7 @@ export const ARTICLES_QUERY = `
     featured,
     category,
     publishedAt,
-    "imageUrl": image.asset->url,
+    "imageUrl": coalesce(image.asset->url, externalImageUrl),
     excerpt
   }
 `

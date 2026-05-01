@@ -82,7 +82,7 @@ export default function ServicesContent({ services }: { services: SanityService[
               {/* Image */}
               <div className={`w-full md:w-[480px] shrink-0 overflow-hidden aspect-[4/3] mb-8 md:mb-0 bg-[#eee] ${i % 2 !== 0 ? 'md:order-last' : ''}`}>
                 {s.imageUrl ? (
-                  <img src={s.imageUrl} alt={s.title} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                  <img src={s.imageUrl} alt={s.title} className={`w-full h-full object-cover ${s.imagePosition ?? 'object-center'} transition-transform duration-700 hover:scale-105`} />
                 ) : (
                   <div className="w-full h-full bg-[#ddd]" />
                 )}

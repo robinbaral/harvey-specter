@@ -48,10 +48,16 @@ export const articleType = defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Cover image',
+      title: 'Cover image (upload)',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
+      description: 'Upload a high-res image. Overrides the URL field below.',
+    }),
+    defineField({
+      name: 'externalImageUrl',
+      title: 'Image URL (external fallback)',
+      type: 'url',
+      description: 'Used when no image is uploaded above.',
     }),
     defineField({
       name: 'excerpt',

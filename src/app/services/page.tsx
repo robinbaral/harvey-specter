@@ -12,6 +12,7 @@ export type SanityService = {
   description: string
   deliverables: string[]
   imageUrl: string | null
+  imagePosition: string | null
   duration: string
   order: number
 }
