@@ -156,23 +156,23 @@ export default function PortfolioSection() {
 
       {/* Mobile grid */}
       <div className="flex flex-col gap-6 md:hidden">
-        {p1 && <Card title={p1.title} tags={p1.tags} image={p1.image} imgH="h-[390px]" />}
-        {p2 && <Card title={p2.title} tags={p2.tags} image={p2.image} imgH="h-[390px]" />}
-        {p3 && <Card title={p3.title} tags={p3.tags} image={p3.image} imgH="h-[390px]" />}
-        {p4 && <Card title={p4.title} tags={p4.tags} image={p4.image} imgH="h-[390px]" />}
+        {p1 && <Card title={p1.title} tags={p1.tags} img={p1.img} imgH="h-[390px]" />}
+        {p2 && <Card title={p2.title} tags={p2.tags} img={p2.img} imgH="h-[390px]" />}
+        {p3 && <Card title={p3.title} tags={p3.tags} img={p3.img} imgH="h-[390px]" />}
+        {p4 && <Card title={p4.title} tags={p4.tags} img={p4.img} imgH="h-[390px]" />}
         <CTABlock />
       </div>
 
       {/* Desktop grid */}
       <div className="hidden md:flex gap-6 items-end">
         <div className="flex flex-col gap-6 flex-1">
-          {p1 && <Card title={p1.title} tags={p1.tags} image={p1.image} imgH="h-[744px]" />}
-          {p2 && <Card title={p2.title} tags={p2.tags} image={p2.image} imgH="h-[699px]" />}
+          {p1 && <Card title={p1.title} tags={p1.tags} img={p1.img} imgH="h-[744px]" />}
+          {p2 && <Card title={p2.title} tags={p2.tags} img={p2.img} imgH="h-[699px]" />}
           <CTABlock />
         </div>
         <div className="flex flex-col gap-6 flex-1 pt-[240px]">
-          {p3 && <Card title={p3.title} tags={p3.tags} image={p3.image} imgH="h-[699px]" />}
-          {p4 && <Card title={p4.title} tags={p4.tags} image={p4.image} imgH="h-[744px]" />}
+          {p3 && <Card title={p3.title} tags={p3.tags} img={p3.img} imgH="h-[699px]" />}
+          {p4 && <Card title={p4.title} tags={p4.tags} img={p4.img} imgH="h-[744px]" />}
         </div>
       </div>
 
