@@ -1,18 +1,38 @@
-import { client } from '@/sanity/lib/client'
-import { SERVICES_QUERY } from '@/sanity/lib/queries'
+'use client';
+
+import { useEffect, useState } from 'react';
+import { client } from '@/sanity/lib/client';
 
 type Service = {
-  _id: string
-  num: string
-  title: string
-  description: string
-  imageUrl: string | null
-  imagePosition: string | null
-  order: number
-}
+  _id: string;
+  num: string;
+  title: string;
+  description: string;
+  imageUrl: string | null;
+  imagePosition: string | null;
+};
 
-export default async function ServicesSection() {
-  const services: Service[] = await client.fetch(SERVICES_QUERY, {}, { next: { revalidate: 60 } })
+const HOMEPAGE_SERVICES_QUERY = `
+  *[_type == "service"] | order(order asc) {
+    _id,
+    num,
+    title,
+    description,
+    "imageUrl": coalesce(image.asset->url, externalImageUrl),
+    imagePosition
+  }
+`;
+
+export default function ServicesSection() {
+  const [services, setServices] = useState<Service[]>([]);
+
+  useEffect(() => {
+    client.fetch<Service[]>(HOMEPAGE_SERVICES_QUERY).then((data) => {
+      if (data?.length) setServices(data);
+    });
+  }, []);
+
+  if (services.length === 0) return null;
 
   return (
     <section className="bg-black px-4 py-12 flex flex-col gap-8 md:px-8 md:py-[80px] md:gap-12">
@@ -63,5 +83,5 @@ export default async function ServicesSection() {
         ))}
       </div>
     </section>
-  )
+  );
 }
